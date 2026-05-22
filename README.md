@@ -30,12 +30,52 @@ This prompt acts as the foundational directive for the LangGraph ReAct agent, gr
 ## 🏗 System Architecture
 
 ### High-Level Design (HLD)
+
+```mermaid
+graph TD
+    A[Next.js Client] -->|SSE Stream & Auth| B[FastAPI Gateway]
+    B -->|Query / Context| C{LangGraph Engine}
+    C <-->|State Checkpoint| D[(SQLite / VectorDB)]
+    C <-->|Action Execution| E((External APIs))
+    
+    classDef client fill:#0f172a,stroke:#38bdf8,stroke-width:2px,color:#fff;
+    classDef gateway fill:#064e3b,stroke:#34d399,stroke-width:2px,color:#fff;
+    classDef engine fill:#4c1d95,stroke:#a78bfa,stroke-width:2px,color:#fff;
+    classDef db fill:#3f3f46,stroke:#a1a1aa,stroke-width:2px,color:#fff;
+    
+    class A client;
+    class B gateway;
+    class C engine;
+    class D db;
+    class E db;
+```
+
 At a macro level, AI Life OS operates on a decoupled client-server architecture with real-time streaming capabilities:
 1. **The Client (Next.js 15):** A highly reactive, glassmorphism-heavy frontend that maintains the state of the conversation, handles Clerk authentication, and renders rich widget data (Calendar, Documents).
 2. **The Gateway (FastAPI):** A high-performance async Python backend that acts as the secure bridge. It validates Clerk JWTs, routes API calls, and handles Server-Sent Events (SSE) for streaming LLM tokens.
 3. **The Engine (LangGraph):** The autonomous brain. It maintains conversational memory, decides whether to perform simple RAG (Retrieval-Augmented Generation) or to spin up a ReAct loop to execute physical tools.
 
 ### Low-Level Design (LLD)
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant FastAPI
+    participant LangGraph
+    participant Tools
+    
+    User->>Frontend: "Send an email..."
+    Frontend->>FastAPI: POST /api/chat/stream
+    FastAPI->>LangGraph: Invoke ReAct Loop
+    LangGraph->>LangGraph: LLM Reasoning
+    LangGraph->>Tools: Execute Gmail Tool (Schema Validated)
+    Tools-->>LangGraph: Success / Action Complete
+    LangGraph-->>FastAPI: Final Synthesized Response
+    FastAPI-->>Frontend: Stream SSE Tokens
+    Frontend-->>User: Seamless UI Render
+```
+
 1. **Frontend State Management:** Uses Zustand (`chatStore.ts`) to manage the complex state of streaming tokens, model selection (Groq vs OpenAI), and agent activation toggles.
 2. **Backend Routing:** 
    - `/api/chat/stream`: Handles the core SSE generation loop.
