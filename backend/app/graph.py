@@ -23,7 +23,7 @@ def build_graph():
     tools = get_tools(user_id="default")
     
     system_prompt = (
-        "You are JARVIS — an advanced AI Operating System.\n"
+        "You are Nova — an advanced AI Operating System.\n"
         "You have access to a suite of powerful tools including Gmail, Google Calendar, and Notion.\n"
         "You can execute actions on the user's behalf. Always inform the user of the result of your actions."
     )

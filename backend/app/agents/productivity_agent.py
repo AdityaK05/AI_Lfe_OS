@@ -21,7 +21,7 @@ class TaskAction(BaseModel):
     title: str | None = Field(default=None, description="Task title if creating")
     priority: str | None = Field(default="Medium", description="High, Medium, or Low")
 
-PRODUCTIVITY_PROMPT = """You are the JARVIS Productivity Agent.
+PRODUCTIVITY_PROMPT = """You are the Nova Productivity Agent.
 Extract the user's intent regarding task management.
 Identify the action (CREATE, LIST, PRIORITIZE), and any task title/priority.
 """

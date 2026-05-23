@@ -7,6 +7,7 @@ from langchain_core.tools import tool
 from app.tools.gmail_tool import get_inbox, search_emails, draft_reply, send_email
 from app.tools.calendar_tool import list_events, create_event, check_free_slots
 from app.tools.notion_tool import get_pages, create_page, append_block
+from app.tools.productivity_tools import create_task, list_tasks, create_routine
 
 # Gmail Tools
 @tool
@@ -66,5 +67,6 @@ def get_tools(user_id: str):
     return [
         gmail_get_inbox, gmail_search_emails, gmail_draft_reply, gmail_send_email,
         cal_list_events, cal_create_event, cal_check_free_slots,
-        notion_get_pages, notion_create_page, notion_append_block
+        notion_get_pages, notion_create_page, notion_append_block,
+        create_task, list_tasks, create_routine
     ]

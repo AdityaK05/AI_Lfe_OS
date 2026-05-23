@@ -19,7 +19,7 @@ class IntentClassification(BaseModel):
         description="The classified intent of the user's message."
     )
 
-ORCHESTRATOR_PROMPT = """You are the JARVIS Orchestrator.
+ORCHESTRATOR_PROMPT = """You are the Nova Orchestrator.
 Your job is to read the user's latest message and classify their intent into exactly one of these categories:
 
 - PLANNER: The user wants to plan a complex task, project, or schedule.

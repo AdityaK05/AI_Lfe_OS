@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 # ── RAG system prompt template ────────────────────────────────────────
 
-RAG_SYSTEM_PROMPT = """You are JARVIS — an advanced personal AI operating system.
+RAG_SYSTEM_PROMPT = """You are Nova — an advanced personal AI operating system.
 
 You have access to the user's personal knowledge base. Below is relevant context
 retrieved from their documents and past conversations. Use this context to provide

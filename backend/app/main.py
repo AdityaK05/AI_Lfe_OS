@@ -16,6 +16,14 @@ from app.rag_chain import stream_rag_chat
 from app.routes_memory import router as memory_router
 from app.clerk_middleware import ClerkMiddleware
 from app.tools.calendar_tool import list_events as calendar_list_events
+from app.tools.gmail_tool import get_inbox as gmail_get_inbox
+
+from app.database import engine
+from app import models_db
+from app.routes_productivity import router as productivity_router
+
+# Initialize database
+models_db.Base.metadata.create_all(bind=engine)
 
 # ── Logging ───────────────────────────────────────────────────────────
 
@@ -35,6 +43,13 @@ app = FastAPI(
 
 settings = get_settings()
 
+# Add Clerk Auth middleware first (so it's inner)
+app.add_middleware(
+    ClerkMiddleware,
+    public_routes=["/health", "/models", "/docs", "/openapi.json"]
+)
+
+# Add CORS middleware last (so it's outer and runs first to add headers)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origin_list,
@@ -43,14 +58,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Add Clerk Auth middleware (exempting health, models, etc.)
-app.add_middleware(
-    ClerkMiddleware,
-    public_routes=["/health", "/models", "/docs", "/openapi.json"]
-)
-
 # Include Module 2 routes
 app.include_router(memory_router)
+app.include_router(productivity_router)
 
 
 # ── SSE streaming helper ─────────────────────────────────────────────
@@ -196,4 +206,23 @@ async def get_calendar_events(days: int = 7):
     except Exception as e:
         logger.error(f"Failed to fetch calendar events: {e}")
         return {"error": str(e), "events": []}
+
+@app.get("/api/emails")
+async def api_get_emails():
+    """Fetch recent emails or return mocks if not configured."""
+    try:
+        emails = gmail_get_inbox(limit=5)
+        # If it returned an error dict (e.g. missing credentials), fallback
+        if emails and isinstance(emails[0], dict) and "error" in emails[0]:
+            raise ValueError(emails[0]["error"])
+        return emails
+    except Exception as e:
+        logger.warning(f"Using mock emails. Real fetch failed: {e}")
+        return [
+            {"id": "1", "subject": "Project update: Launch next week", "sender": "sarah@company.com", "date": "Today"},
+            {"id": "2", "subject": "Your receipt from GitHub", "sender": "receipts@github.com", "date": "Yesterday"},
+            {"id": "3", "subject": "Weekly Newsletter", "sender": "hello@morningbrew.com", "date": "Yesterday"},
+            {"id": "4", "subject": "Invitation: Design Sync", "sender": "alex@company.com", "date": "2 days ago"},
+        ]
+
 

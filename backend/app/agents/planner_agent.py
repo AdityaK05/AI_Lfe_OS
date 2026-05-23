@@ -18,7 +18,7 @@ class PlanOutput(BaseModel):
         description="A list of specific, actionable steps to achieve the goal."
     )
 
-PLANNER_PROMPT = """You are the JARVIS Planning Agent.
+PLANNER_PROMPT = """You are the Nova Planning Agent.
 The user has a complex goal. Break it down into a clear, actionable, step-by-step plan.
 Each step should be specific and concise. Do not execute the plan, just create it.
 """

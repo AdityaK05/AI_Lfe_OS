@@ -17,12 +17,12 @@ logger = logging.getLogger(__name__)
 class SearchQuery(BaseModel):
     query: str = Field(description="The search query to send to the search engine.")
 
-RESEARCH_PROMPT = """You are the JARVIS Research Agent.
+RESEARCH_PROMPT = """You are the Nova Research Agent.
 Determine the best search query to fulfill the user's request.
 Return ONLY the search query string, nothing else.
 """
 
-SUMMARIZE_PROMPT = """You are the JARVIS Research Agent.
+SUMMARIZE_PROMPT = """You are the Nova Research Agent.
 Summarize the following search results in 3-5 concise bullet points.
 Include the most relevant facts and append source URLs if available.
 """

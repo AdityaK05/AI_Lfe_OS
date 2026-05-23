@@ -134,6 +134,41 @@ export async function fetchDocuments(userId = "default", token?: string | null):
 }
 
 /**
+ * Upload a document for RAG ingestion.
+ */
+export async function uploadDocument(
+  file: File,
+  userId: string = "default",
+  token?: string | null
+): Promise<any> {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("user_id", userId);
+
+  const headers: Record<string, string> = {};
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+  
+  const res = await fetch(`${API_BASE}/documents/upload`, {
+    method: "POST",
+    headers,
+    body: formData,
+  });
+  
+  if (!res.ok) {
+    let errMsg = "Failed to upload document";
+    try {
+      const errJson = await res.json();
+      errMsg = errJson.detail || errMsg;
+    } catch {
+      const errText = await res.text();
+      if (errText) errMsg = errText;
+    }
+    throw new Error(errMsg);
+  }
+  return res.json();
+}
+
+/**
  * Store a memory (conversation turn or note).
  */
 export async function storeMemory(
