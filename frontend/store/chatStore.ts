@@ -1,7 +1,4 @@
-/**
- * AI Life OS — Chat Store (Zustand)
- * Manages conversation state, model selection, and streaming status.
- */
+
 
 import { create } from "zustand";
 
@@ -19,7 +16,7 @@ interface ChatState {
   isStreaming: boolean;
   userId: string;
 
-  // Actions
+  
   addMessage: (role: Message["role"], content: string, model?: string) => string;
   appendToLastMessage: (token: string) => void;
   setModel: (model: string) => void;

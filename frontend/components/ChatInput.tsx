@@ -1,14 +1,9 @@
 "use client";
 
-/**
- * AI Life OS — Chat Input Component
- * Text input with send button. Enter to send, Shift+Enter for newline.
- */
-
 import React, { useState, useRef, useCallback } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { uploadDocument } from "@/lib/api";
-import { Paperclip, Loader2, CheckCircle2, Send } from "lucide-react";
+import { Paperclip, Loader2, CheckCircle2, Send, ArrowUp } from "lucide-react";
 
 interface ChatInputProps {
   onSend: (message: string) => void;
@@ -45,7 +40,7 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
 
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(e.target.value);
-    // Auto-resize textarea
+    
     const el = e.target;
     el.style.height = "auto";
     el.style.height = Math.min(el.scrollHeight, 160) + "px";
@@ -74,7 +69,7 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
   };
 
   return (
-    <div className="relative flex items-end gap-3 px-6 py-4 rounded-3xl border-2 border-white/50 bg-white/80 focus-within:bg-white focus-within:border-indigo-300 focus-within:ring-4 focus-within:ring-indigo-100/50 shadow-sm transition-all duration-300 backdrop-blur-md">
+    <div className="relative flex items-end gap-3 px-5 py-3 glass-panel focus-within:border-foreground/30 focus-within:shadow-md transition-smooth rounded-[24px]">
       
       <input
         type="file"
@@ -88,12 +83,12 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
         onClick={() => fileInputRef.current?.click()}
         disabled={disabled || isUploading}
         title="Upload Document for RAG"
-        className={`flex-shrink-0 w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-300 ${
+        className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-smooth ${
           uploadSuccess 
-            ? "bg-emerald-100 text-emerald-600 border-2 border-emerald-200" 
+            ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20" 
             : isUploading
-            ? "bg-indigo-50 text-indigo-400"
-            : "bg-white text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 border-2 border-transparent hover:border-indigo-100 shadow-sm"
+            ? "bg-foreground/5 text-foreground/50"
+            : "bg-transparent text-text-muted hover:text-foreground hover:bg-foreground/5 border border-transparent hover:border-border"
         } disabled:opacity-50`}
       >
         {isUploading ? (
@@ -101,7 +96,7 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
         ) : uploadSuccess ? (
           <CheckCircle2 className="w-5 h-5" />
         ) : (
-          <Paperclip className="w-5 h-5" />
+          <Paperclip className="w-5 h-5" strokeWidth={1.5} />
         )}
       </button>
 
@@ -111,20 +106,20 @@ export default function ChatInput({ onSend, disabled }: ChatInputProps) {
         onChange={handleInput}
         onKeyDown={handleKeyDown}
         disabled={disabled}
-        placeholder={disabled ? "Nova is thinking..." : "Message Nova..."}
+        placeholder={disabled ? "Processing..." : "Ask Nova..."}
         rows={1}
-        className="flex-1 bg-transparent text-gray-900 placeholder-gray-400 resize-none outline-none text-[15px] leading-relaxed max-h-40 scrollbar-thin scrollbar-thumb-gray-200 py-2"
+        className="flex-1 bg-transparent text-foreground placeholder-text-muted resize-none outline-none text-[15px] leading-relaxed max-h-40 scrollbar-thin py-2.5"
         id="chat-input"
       />
 
       <button
         onClick={handleSend}
         disabled={disabled || !input.trim()}
-        className="flex-shrink-0 w-10 h-10 rounded-2xl bg-indigo-600 text-white flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 hover:bg-indigo-700 disabled:opacity-30 disabled:hover:scale-100 shadow-md shadow-indigo-200"
+        className="flex-shrink-0 w-10 h-10 rounded-full bg-foreground text-background flex items-center justify-center transition-smooth hover:scale-105 active:scale-95 disabled:opacity-30 disabled:hover:scale-100 shadow-sm"
         id="send-button"
         aria-label="Send message"
       >
-        <Send className="w-4 h-4 ml-0.5" />
+        <ArrowUp className="w-5 h-5" strokeWidth={2} />
       </button>
     </div>
   );

@@ -5,7 +5,7 @@ from datetime import datetime
 class TaskBase(BaseModel):
     title: str
     description: Optional[str] = None
-    status: Optional[str] = "TODO"
+    status: Optional[str] = 'TODO'
     due_date: Optional[datetime] = None
 
 class TaskCreate(TaskBase):
@@ -27,7 +27,7 @@ class Task(TaskBase):
 
 class RoutineBase(BaseModel):
     title: str
-    frequency: Optional[str] = "daily"
+    frequency: Optional[str] = 'daily'
     time_of_day: Optional[str] = None
 
 class RoutineCreate(RoutineBase):

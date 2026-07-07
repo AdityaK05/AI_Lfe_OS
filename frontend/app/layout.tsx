@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Inter } from "next/font/google";
 import Sidebar from "@/components/Sidebar";
+import LayoutWrapper from "@/components/LayoutWrapper";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import "./globals.css";
 
 const inter = Inter({
-  variable: "--font-geist-sans",
+  variable: "--font-sans",
   subsets: ["latin"],
   display: "swap",
 });
@@ -26,14 +28,13 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className={`${inter.variable} h-full antialiased`}>
-        <body className="min-h-full flex flex-col bg-gradient-to-br from-indigo-50 via-white to-purple-50 text-gray-800">
-          <div className="flex h-screen overflow-hidden p-3 gap-4">
-            <Sidebar />
-            <main className="flex-1 overflow-y-auto bg-white/60 backdrop-blur-xl rounded-3xl shadow-sm border border-white/50 relative">
+      <html lang="en" className={`${inter.variable} h-full antialiased`} suppressHydrationWarning>
+        <body className="min-h-full flex flex-col bg-background text-foreground transition-colors duration-500">
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <LayoutWrapper>
               {children}
-            </main>
-          </div>
+            </LayoutWrapper>
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>

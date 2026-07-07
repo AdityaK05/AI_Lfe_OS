@@ -60,47 +60,47 @@ export default function RoutinesPage() {
       method: "POST",
       headers: { Authorization: `Bearer ${token}` }
     });
-    // In a real app we'd refresh a separate SWR for logs or add a "logged" property in the backend response
+    
     mutate(); 
   };
 
   return (
     <div className="p-8 max-w-4xl mx-auto mt-8">
       <header className="mb-10 text-center flex flex-col items-center">
-        <div className="w-16 h-16 bg-rose-100 text-rose-500 rounded-3xl flex items-center justify-center mb-4 shadow-sm transform rotate-6 hover:rotate-0 transition-transform duration-300">
-          <CalendarDays className="w-8 h-8" />
+        <div className="w-16 h-16 bg-foreground/5 text-foreground rounded-3xl flex items-center justify-center mb-4 border border-border shadow-sm transform rotate-6 hover:rotate-0 transition-smooth">
+          <CalendarDays className="w-8 h-8" strokeWidth={1.5} />
         </div>
-        <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
+        <h1 className="text-4xl font-semibold text-foreground tracking-tight">
           Routines & Habits
         </h1>
-        <p className="text-gray-500 mt-2 font-medium">Build consistency with daily tracking.</p>
+        <p className="text-text-muted mt-2 font-medium">Build consistency with daily tracking.</p>
       </header>
 
-      {/* Add Routine Input */}
+      {/* Add Routine Form */}
       <form onSubmit={addRoutine} className="mb-8 flex gap-3">
         <input
           type="text"
           value={newRoutineTitle}
           onChange={(e) => setNewRoutineTitle(e.target.value)}
           placeholder="New daily habit... (e.g. 'Read 20 pages')"
-          className="flex-1 bg-white/80 backdrop-blur-sm border-2 border-white/50 shadow-sm rounded-2xl px-5 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-rose-300 focus:ring-4 focus:ring-rose-100/50 transition-all font-medium text-lg"
+          className="flex-1 glass-panel px-5 py-3.5 text-foreground placeholder-text-muted focus:outline-none focus:border-foreground/30 focus:shadow-md transition-smooth font-medium text-lg rounded-2xl"
         />
         <button
           type="submit"
           disabled={!newRoutineTitle.trim()}
-          className="bg-rose-500 hover:bg-rose-600 text-white px-6 py-3 rounded-2xl font-bold transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 flex items-center gap-2 shadow-lg shadow-rose-200"
+          className="bg-foreground text-background hover:opacity-90 px-6 py-3.5 rounded-2xl font-semibold transition-smooth hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:hover:translate-y-0 flex items-center gap-2 shadow-sm"
         >
-          <Plus className="w-5 h-5" />
+          <Plus className="w-5 h-5" strokeWidth={2} />
           Add Habit
         </button>
       </form>
 
-      {/* Routines List */}
-      {error && <div className="text-red-500 mb-4">Failed to load routines.</div>}
-      {!routines && !error && <div className="text-gray-500">Loading routines...</div>}
+      {/* Error & Loading States */}
+      {error && <div className="text-red-500 mb-4 text-center">Failed to load routines.</div>}
+      {!routines && !error && <div className="text-text-muted text-center py-8">Loading routines...</div>}
 
       {routines && routines.length === 0 && (
-        <div className="text-center py-12 text-gray-500 border border-gray-200 shadow-sm rounded-md bg-white">
+        <div className="text-center py-12 text-text-muted glass-panel rounded-2xl font-medium">
           No habits defined yet. Start small!
         </div>
       )}
@@ -108,19 +108,19 @@ export default function RoutinesPage() {
       {routines && routines.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {routines.map((routine) => (
-            <div key={routine.id} className="bg-white/80 backdrop-blur-sm border-2 border-white/50 shadow-sm rounded-3xl p-5 flex items-center justify-between group hover:border-rose-200 hover:-translate-y-1 hover:shadow-md transition-all duration-300">
+            <div key={routine.id} className="glass-panel glass-panel-hover rounded-3xl p-5 flex items-center justify-between group transition-smooth">
               <div>
-                <h3 className="text-gray-900 font-bold text-lg">{routine.title}</h3>
-                <div className="inline-block px-3 py-1 bg-rose-50 text-rose-600 rounded-full text-[10px] font-bold uppercase tracking-wider mt-2 border border-rose-100">
+                <h3 className="text-foreground font-semibold text-lg">{routine.title}</h3>
+                <div className="inline-block px-3 py-1 bg-foreground/5 text-foreground rounded-full text-[10px] font-bold uppercase tracking-wider mt-2 border border-border">
                   {routine.frequency}
                 </div>
               </div>
               <button 
                 onClick={() => logRoutine(routine.id)}
-                className="text-gray-300 hover:text-emerald-500 hover:bg-emerald-50 p-2 rounded-full transition-all hover:scale-110 active:scale-95"
+                className="text-border hover:text-foreground hover:bg-foreground/5 p-2 rounded-full transition-smooth hover:scale-110 active:scale-95"
                 title="Mark completed for today"
               >
-                <CheckCircle2 className="w-8 h-8" />
+                <CheckCircle2 className="w-8 h-8" strokeWidth={1.5} />
               </button>
             </div>
           ))}

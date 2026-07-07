@@ -1,9 +1,6 @@
 "use client";
 
-/**
- * AI Life OS — Document Upload Component
- * Drag-and-drop file upload with progress and status indicators.
- */
+
 
 import React, { useState, useRef, useCallback } from "react";
 import { useAuth } from "@clerk/nextjs";
@@ -52,7 +49,7 @@ export default function DocumentUpload({
         formData.append("file", file);
         formData.append("user_id", userId);
 
-        // Simulate progress stages since fetch doesn't expose upload progress
+        
         setProgress(30);
 
         const token = await getToken();
@@ -124,7 +121,7 @@ export default function DocumentUpload({
           id="file-input"
         />
 
-        {/* Icon */}
+        {}
         <div className="mx-auto mb-3 w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-400/20 to-cyan-400/20 flex items-center justify-center">
           <svg className="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
@@ -136,7 +133,7 @@ export default function DocumentUpload({
         </p>
         <p className="text-[10px] text-gray-600">PDF, TXT, Markdown — max 10MB</p>
 
-        {/* Progress bar */}
+        {}
         {isUploading && (
           <div className="mt-4 w-full bg-white/5 rounded-full h-1.5 overflow-hidden">
             <div
@@ -147,7 +144,7 @@ export default function DocumentUpload({
         )}
       </div>
 
-      {/* Success */}
+      {}
       {result && (
         <div className="mt-3 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 animate-fade-in">
           <div className="flex items-center gap-2 mb-1">
@@ -162,7 +159,7 @@ export default function DocumentUpload({
         </div>
       )}
 
-      {/* Error */}
+      {}
       {error && (
         <div className="mt-3 p-3 rounded-lg bg-red-500/10 border border-red-500/20 animate-fade-in">
           <p className="text-sm text-red-400">⚠️ {error}</p>

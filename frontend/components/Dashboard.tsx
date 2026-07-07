@@ -13,12 +13,12 @@ export default function Dashboard() {
       </div>
 
       <div className="flex flex-col gap-6 p-6 pt-4">
-        {/* Calendar Integration */}
+        {}
         <section>
           <CalendarWidget />
         </section>
 
-        {/* Document Knowledge Base */}
+        {}
         <section>
           <DocumentListWidget />
         </section>

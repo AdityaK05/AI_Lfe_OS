@@ -1,9 +1,6 @@
 "use client";
 
-/**
- * AI Life OS — Chat Page
- * Main conversational interface with streaming responses and RAG.
- */
+
 
 import React, { useEffect, useRef, useCallback, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
@@ -59,7 +56,7 @@ export default function ChatPage() {
   );
 
   return (
-    <div className="flex h-full bg-transparent overflow-hidden text-gray-800">
+    <div className="flex h-full bg-transparent overflow-hidden text-foreground">
       {/* Main Chat Area */}
       <main className="flex-1 flex flex-col min-w-0 bg-transparent relative">
         <ChatHeader
@@ -108,10 +105,10 @@ export default function ChatPage() {
           )}
         </div>
 
-        <footer className="px-4 md:px-8 xl:px-32 pb-8 pt-4 bg-gradient-to-t from-white via-white/80 to-transparent">
+        <footer className="px-4 md:px-8 xl:px-32 pb-8 pt-4 mt-auto sticky bottom-0 bg-gradient-to-t from-background via-background to-transparent">
           <div className="max-w-4xl mx-auto">
             <ChatInput onSend={handleSend} disabled={isStreaming} />
-            <p className="text-center text-[11px] font-medium text-gray-400 mt-3 tracking-wide">
+            <p className="text-center text-[11px] font-medium text-text-muted mt-3 tracking-wide">
               Nova can make mistakes. Verify important information.
             </p>
           </div>

@@ -1,9 +1,6 @@
 "use client";
 
-/**
- * AI Life OS — Model Selector Component
- * Dropdown to pick between Groq cloud and Ollama local models.
- */
+
 
 import React, { useState, useRef, useEffect } from "react";
 
@@ -48,7 +45,7 @@ export default function ModelSelector({
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  // Close on outside click
+  
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) {
@@ -63,7 +60,7 @@ export default function ModelSelector({
 
   return (
     <div ref={ref} className="relative" id="model-selector">
-      {/* Trigger button */}
+      {}
       <button
         onClick={() => !disabled && setIsOpen(!isOpen)}
         disabled={disabled}
@@ -94,7 +91,7 @@ export default function ModelSelector({
         </svg>
       </button>
 
-      {/* Dropdown */}
+      {}
       {isOpen && (
         <div className="absolute top-full left-0 mt-2 w-64 bg-gray-900/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl overflow-hidden z-50 animate-fade-in">
           <div className="px-3 py-2 border-b border-white/5">

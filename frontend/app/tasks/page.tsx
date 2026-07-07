@@ -72,16 +72,16 @@ export default function TasksPage() {
   return (
     <div className="p-8 max-w-4xl mx-auto mt-8">
       <header className="mb-10 text-center flex flex-col items-center">
-        <div className="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-3xl flex items-center justify-center mb-4 shadow-sm transform -rotate-6 hover:rotate-0 transition-transform duration-300">
-          <CheckSquare className="w-8 h-8" />
+        <div className="w-16 h-16 bg-foreground/5 text-foreground rounded-3xl flex items-center justify-center mb-4 border border-border shadow-sm transform -rotate-6 hover:rotate-0 transition-smooth">
+          <CheckSquare className="w-8 h-8" strokeWidth={1.5} />
         </div>
-        <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">
+        <h1 className="text-4xl font-semibold text-foreground tracking-tight">
           Task Management
         </h1>
-        <p className="text-gray-500 mt-2 font-medium">Organize your life, powered by AI.</p>
+        <p className="text-text-muted mt-2 font-medium">Organize your life, powered by AI.</p>
       </header>
 
-      {/* Add Task Input */}
+      {/* Add Task Form */}
       <form onSubmit={addTask} className="mb-8 flex gap-3 relative">
         <div className="flex-1 relative group">
           <input
@@ -89,65 +89,65 @@ export default function TasksPage() {
             value={newTaskTitle}
             onChange={(e) => setNewTaskTitle(e.target.value)}
             placeholder="What needs to be done? (e.g. 'Buy groceries')"
-            className="w-full bg-white/80 backdrop-blur-sm border-2 border-white/50 shadow-sm rounded-2xl px-5 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:border-indigo-300 focus:ring-4 focus:ring-indigo-100/50 transition-all font-medium text-lg"
+            className="w-full glass-panel px-5 py-3.5 text-foreground placeholder-text-muted focus:outline-none focus:border-foreground/30 focus:shadow-md transition-smooth font-medium text-lg rounded-2xl"
           />
         </div>
         <button
           type="submit"
           disabled={!newTaskTitle.trim()}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-2xl font-bold transition-all hover:scale-105 active:scale-95 disabled:opacity-50 disabled:hover:scale-100 flex items-center gap-2 shadow-lg shadow-indigo-200"
+          className="bg-foreground text-background hover:opacity-90 px-6 py-3.5 rounded-2xl font-semibold transition-smooth hover:-translate-y-1 active:scale-95 disabled:opacity-50 disabled:hover:translate-y-0 flex items-center gap-2 shadow-sm"
         >
-          <Plus className="w-5 h-5" />
+          <Plus className="w-5 h-5" strokeWidth={2} />
           Add Task
         </button>
         <button
           type="button"
           title="Ask Nova to break down a complex task"
-          className="bg-white hover:bg-indigo-50 text-indigo-500 px-5 py-3 rounded-2xl transition-all hover:scale-105 active:scale-95 flex items-center justify-center border-2 border-indigo-100 shadow-sm"
+          className="glass-panel text-foreground px-5 py-3.5 rounded-2xl transition-smooth hover:-translate-y-1 active:scale-95 flex items-center justify-center"
         >
-          <Sparkles className="w-4 h-4" />
+          <Sparkles className="w-5 h-5" strokeWidth={1.5} />
         </button>
       </form>
 
       {/* Task List */}
-      {error && <div className="text-red-500 mb-4">Failed to load tasks.</div>}
-      {!tasks && !error && <div className="text-gray-500">Loading tasks...</div>}
+      {error && <div className="text-red-500 mb-4 text-center">Failed to load tasks.</div>}
+      {!tasks && !error && <div className="text-text-muted text-center py-8">Loading tasks...</div>}
       
       {tasks && tasks.length === 0 && (
-        <div className="text-center py-12 text-gray-500 border border-gray-200 rounded-md bg-white shadow-sm">
+        <div className="text-center py-12 text-text-muted glass-panel rounded-2xl font-medium">
           No tasks yet. You're all caught up!
         </div>
       )}
 
       {tasks && tasks.length > 0 && (
-        <div className="space-y-2">
+        <div className="space-y-3">
           {tasks.map((task) => (
             <div
               key={task.id}
-              className={`group flex items-center gap-4 p-4 rounded-2xl border-2 transition-all duration-300 hover:-translate-y-1 hover:shadow-md ${
+              className={`group flex items-center gap-4 p-4 rounded-2xl transition-smooth glass-panel hover:-translate-y-1 ${
                 task.status === "DONE"
-                  ? "bg-white/40 border-transparent opacity-60"
-                  : "bg-white/80 border-white/50 hover:border-indigo-100 shadow-sm"
+                  ? "opacity-50"
+                  : "glass-panel-hover"
               }`}
             >
               <button
                 onClick={() => toggleTask(task)}
-                className={`w-7 h-7 rounded-lg flex items-center justify-center border-2 transition-all duration-300 ${
+                className={`w-7 h-7 rounded-lg flex items-center justify-center border transition-smooth ${
                   task.status === "DONE"
-                    ? "bg-emerald-500 border-emerald-500 text-white scale-110 shadow-sm shadow-emerald-200"
-                    : "border-gray-300 hover:border-indigo-400 bg-white"
+                    ? "bg-foreground border-foreground text-background scale-110 shadow-sm"
+                    : "border-border hover:border-foreground/50 bg-background"
                 }`}
               >
-                {task.status === "DONE" && <CheckSquare className="w-5 h-5" />}
+                {task.status === "DONE" && <CheckSquare className="w-4 h-4" strokeWidth={2} />}
               </button>
-              <span className={`flex-1 text-lg font-medium transition-colors ${task.status === "DONE" ? "line-through text-gray-400" : "text-gray-800"}`}>
+              <span className={`flex-1 text-lg font-medium transition-colors ${task.status === "DONE" ? "line-through text-text-muted" : "text-foreground"}`}>
                 {task.title}
               </span>
               <button 
                 onClick={() => deleteTask(task.id)}
-                className="opacity-0 group-hover:opacity-100 text-rose-400 hover:text-rose-600 hover:bg-rose-50 p-2 rounded-xl transition-all"
+                className="opacity-0 group-hover:opacity-100 text-red-500/70 hover:text-red-500 hover:bg-red-500/10 p-2.5 rounded-xl transition-smooth"
               >
-                <Trash2 className="w-5 h-5" />
+                <Trash2 className="w-4 h-4" strokeWidth={1.5} />
               </button>
             </div>
           ))}

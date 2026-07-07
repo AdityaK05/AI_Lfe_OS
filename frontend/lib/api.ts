@@ -1,7 +1,4 @@
-/**
- * AI Life OS — SSE Streaming Client
- * Consumes Server-Sent Events from the FastAPI backend.
- */
+
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
@@ -16,10 +13,7 @@ interface TokenEvent {
   error?: string;
 }
 
-/**
- * Stream chat tokens from the backend via SSE.
- * Yields individual string tokens as they arrive.
- */
+
 export async function* streamChat(
   messages: ChatMessage[],
   model: string,
@@ -108,7 +102,7 @@ export async function fetchModels(token?: string | null): Promise<
 }
 
 
-// ── Module 2: Document + Memory APIs ────────────────────────────────
+
 
 export interface DocumentInfo {
   doc_id: string;
@@ -117,9 +111,7 @@ export interface DocumentInfo {
   chunks: number;
 }
 
-/**
- * Fetch list of uploaded documents for a user.
- */
+
 export async function fetchDocuments(userId = "default", token?: string | null): Promise<DocumentInfo[]> {
   try {
     const headers: Record<string, string> = {};
@@ -133,9 +125,7 @@ export async function fetchDocuments(userId = "default", token?: string | null):
   }
 }
 
-/**
- * Upload a document for RAG ingestion.
- */
+
 export async function uploadDocument(
   file: File,
   userId: string = "default",
@@ -168,9 +158,7 @@ export async function uploadDocument(
   return res.json();
 }
 
-/**
- * Store a memory (conversation turn or note).
- */
+
 export async function storeMemory(
   userId: string,
   text: string,
@@ -193,9 +181,7 @@ export async function storeMemory(
   }
 }
 
-/**
- * Query semantic memory.
- */
+
 export async function queryMemory(
   userId: string,
   query: string,
@@ -220,7 +206,7 @@ export async function queryMemory(
 }
 
 
-// -- Module 4: Agent Integrations ------------------------------------
+
 
 export interface CalendarEvent {
   id: string;
