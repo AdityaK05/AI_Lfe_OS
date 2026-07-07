@@ -6,6 +6,7 @@ from app.models_db import Task, Routine
 
 @tool
 def create_task(title: str, description: str=None, due_date: str=None) -> str:
+    """Create a new pending task with a title, optional description, and optional due date (ISO string)."""
     db: Session = SessionLocal()
     try:
         user_id = 'default_user'
@@ -27,6 +28,7 @@ def create_task(title: str, description: str=None, due_date: str=None) -> str:
 
 @tool
 def list_tasks() -> str:
+    """List all pending tasks for the current user."""
     db: Session = SessionLocal()
     try:
         user_id = 'default_user'
@@ -44,6 +46,7 @@ def list_tasks() -> str:
 
 @tool
 def create_routine(title: str, frequency: str='daily', time_of_day: str=None) -> str:
+    """Create a new routine/habit to track, optionally specifying frequency and time of day."""
     db: Session = SessionLocal()
     try:
         user_id = 'default_user'

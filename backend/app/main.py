@@ -6,8 +6,8 @@ from app.config import get_settings
 from app.models import ChatRequestWithRAG, TokenEvent
 from app.chain import stream_chat
 from app.llm_router import get_supported_models
-# from app.rag_chain import stream_rag_chat
-# from app.routes_memory import router as memory_router
+from app.rag_chain import stream_rag_chat
+from app.routes_memory import router as memory_router
 from app.clerk_middleware import ClerkMiddleware
 from app.tools.calendar_tool import list_events as calendar_list_events
 from app.tools.gmail_tool import get_inbox as gmail_get_inbox
@@ -21,7 +21,7 @@ app = FastAPI(title='AI Life OS — Core Intelligence', description='Streaming c
 settings = get_settings()
 app.add_middleware(ClerkMiddleware, public_routes=['/health', '/models', '/docs', '/openapi.json'])
 app.add_middleware(CORSMiddleware, allow_origins=settings.cors_origin_list, allow_credentials=True, allow_methods=['*'], allow_headers=['*'])
-# app.include_router(memory_router)
+app.include_router(memory_router)
 app.include_router(productivity_router)
 
 async def _sse_generator(request: ChatRequestWithRAG):
@@ -52,7 +52,8 @@ async def chat(request: ChatRequestWithRAG):
 async def _agent_sse_generator(request: ChatRequestWithRAG):
     try:
         from langchain_core.messages import HumanMessage, AIMessage
-        from app.graph import graph
+        from app.graph import get_graph
+        graph = get_graph(request.user_id)
         lc_messages = []
         for m in request.messages:
             if m.role == 'user':
@@ -100,10 +101,6 @@ async def get_calendar_events(days: int=7):
         logger.error(f'Failed to fetch calendar events: {e}')
         return {'error': str(e), 'events': []}
 
-@app.get('/memory/recent')
-async def get_recent_memory():
-    # Return empty until memory router is fully enabled
-    return {'results': []}
 
 @app.get('/api/emails')
 async def api_get_emails():

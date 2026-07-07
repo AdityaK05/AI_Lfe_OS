@@ -5,7 +5,7 @@
 import React, { useState, useEffect } from "react";
 import useSWR from "swr";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
-import { Mail, Calendar as CalIcon, CheckSquare, Brain, Activity, Sparkles } from "lucide-react";
+import { Mail, Calendar as CalIcon, CheckSquare, Brain, Activity, Sparkles, FileText } from "lucide-react";
 
 import { useAuth } from "@clerk/nextjs";
 
@@ -72,7 +72,7 @@ function WidgetCard({ title, icon: Icon, children, isLoading, isError, className
 
 
 export default function DashboardPage() {
-  const { getToken } = useAuth();
+  const { getToken, userId } = useAuth();
   
   
   const swrConfig = { refreshInterval: 30000, shouldRetryOnError: false };
@@ -92,7 +92,8 @@ export default function DashboardPage() {
   const { data: tasks, error: errTasks } = useSWR(`${API_BASE}/api/tasks`, fetcher, swrConfig);
   const { data: emails, error: errEmails } = useSWR(`${API_BASE}/api/emails`, fetcher, swrConfig);
   const { data: events, error: errEvents } = useSWR(`${API_BASE}/calendar/events`, fetcher, swrConfig);
-  const { data: memories, error: errMemories } = useSWR(`${API_BASE}/memory/recent`, fetcher, swrConfig);
+  const { data: memories, error: errMemories } = useSWR(userId ? `${API_BASE}/memory/recent?user_id=${userId}` : null, fetcher, swrConfig);
+  const { data: documents, error: errDocuments } = useSWR(userId ? `${API_BASE}/documents/list?user_id=${userId}` : null, fetcher, swrConfig);
 
   const [agentLogs, setAgentLogs] = useState<string[]>([]);
 
@@ -130,10 +131,10 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-fr">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-start">
         
-        {}
-        <WidgetCard title="Recent Emails" icon={Mail} isLoading={!emails && !errEmails} isError={errEmails} className="md:col-span-2 lg:col-span-3">
+        {/* Recent Emails */}
+        <WidgetCard title="Recent Emails" icon={Mail} isLoading={!emails && !errEmails} isError={errEmails} className="md:col-span-2 lg:col-span-3 xl:col-span-4">
           <div className="flex overflow-x-auto gap-4 pb-4 custom-scrollbar">
             {emails?.length ? emails.map((e: any, i: number) => {
               const senderName = e.sender.replace(/<.*>/, '').replace(/"/g, '').trim();
@@ -192,6 +193,18 @@ export default function DashboardPage() {
           </ul>
         </WidgetCard>
 
+        {/* Uploaded Documents */}
+        <WidgetCard title="Uploaded Documents" icon={FileText} isLoading={!documents && !errDocuments} isError={errDocuments}>
+          <ul className="text-[13px] space-y-4 text-text-muted">
+            {documents?.documents?.length ? documents.documents.map((d: any, i: number) => (
+              <li key={i} className="flex flex-col p-3 bg-foreground/5 rounded-xl border border-border">
+                <span className="font-semibold text-foreground truncate">{d.title}</span>
+                <span className="text-[11px] opacity-70 mt-1">{d.chunks} chunks vectorized</span>
+              </li>
+            )) : <li className="text-text-muted">No documents uploaded.</li>}
+          </ul>
+        </WidgetCard>
+
         {}
         <WidgetCard title="Agent Log" icon={Activity}>
           <ul className="text-[12px] font-mono space-y-2 text-text-muted">
@@ -202,7 +215,7 @@ export default function DashboardPage() {
         </WidgetCard>
 
         {/* Chart */}
-        <div className="glass-panel p-8 md:col-span-2 lg:col-span-1">
+        <div className="glass-panel p-8 md:col-span-2 lg:col-span-1 xl:col-span-2">
           <div className="flex items-center gap-3 text-foreground mb-8">
             <div className="p-2.5 bg-foreground/5 rounded-xl border border-border">
               <Activity className="w-5 h-5 text-foreground opacity-80" strokeWidth={1.5} />

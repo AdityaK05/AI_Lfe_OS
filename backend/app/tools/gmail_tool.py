@@ -41,9 +41,12 @@ def search_emails(query: str) -> list[dict]:
         messages = results.get('messages', [])
         emails = []
         for msg in messages:
-            msg_data = service.users().messages().get(userId='me', id=msg['id']).execute()
-            snippet = msg_data.get('snippet', '')
-            emails.append({'id': msg['id'], 'snippet': snippet})
+            msg_data = service.users().messages().get(userId='me', id=msg['id'], format='metadata', metadataHeaders=['Subject', 'From', 'Date']).execute()
+            headers = msg_data.get('payload', {}).get('headers', [])
+            subject = next((h['value'] for h in headers if h['name'] == 'Subject'), 'No Subject')
+            sender = next((h['value'] for h in headers if h['name'] == 'From'), 'Unknown')
+            date = next((h['value'] for h in headers if h['name'] == 'Date'), '')
+            emails.append({'id': msg['id'], 'snippet': msg_data.get('snippet', ''), 'subject': subject, 'sender': sender, 'date': date})
         return emails
     except Exception as e:
         logger.error(f'Gmail search error: {e}')
